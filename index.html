@@ -1,1 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamar Medical Center | Premium Care</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fontsource Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat@5.0.19/index.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/nunito-sans@5.0.17/index.min.css">
+
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <!-- GSAP for High-End Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* --- Premium Variables & Base --- */
+        :root {
+            --primary: #0f4c5c; /* Deep Teal */
+            --accent: #e36414;  /* Burnt Orange/Gold Accent */
+            --gold: #d4af37;
+            --light: #f8fafc;
+            --dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            cursor: none; /* Custom Cursor */
+        }
+
+        .lang-font {
+            font-family: 'Nunito Sans', sans-serif;
+        }
+
+        /* --- Custom Cursor --- */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        body:hover .cursor-outline.hovered {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(15, 76, 92, 0.1);
+            border-color: transparent;
+        }
+
+        /* --- Glassmorphism & Utilities --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, #2a9d8f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Loader --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loader-line {
+            width: 0%;
+            height: 2px;
+            background: var(--primary);
+            margin-top: 20px;
+            transition: width 0.5s ease;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* --- Dynamic Elements --- */
+        .service-card {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .service-card:hover {
+            transform: translateY(-15px);
+        }
+        
+        .magnetic-btn {
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Image Masking */
+        .reveal-img-container {
+            overflow: hidden;
+            position: relative;
+        }
+        .reveal-img-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transform-origin: right;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-teal-200 selection:text-teal-900">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Loader -->
+    <div id="loader">
+        <h1 class="text-4xl font-bold tracking-[0.5em] text-teal-900 animate-pulse">KAMAR</h1>
+        <div class="w-64 h-[2px] bg-gray-200 mt-4 overflow-hidden rounded-full">
+            <div class="loader-line h-full bg-teal-700"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500 py-6" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="group flex items-center gap-3 z-50 magnetic-target">
+                <div class="w-10 h-10 bg-teal-700 rounded-lg flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                    <span class="material-icons-round text-2xl">local_hospital</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl tracking-widest text-teal-900 uppercase leading-none">Kamar</span>
+                    <span class="text-[0.6rem] text-teal-600 tracking-[0.3em] uppercase font-semibold" data-i18n="brand_sub">Medical Center</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center space-x-10">
+                <a href="#home" class="nav-link text-sm font-semibold text-gray-600 hover:text-teal-700 uppercase tracking-wider transition-colors magnetic-target" data-i18n="nav_home">Home</a>
+                <a href="#about" class="nav-link text-sm font-semibold text-gray-600 hover:text-teal-700 uppercase tracking-wider transition-colors magnetic-target" data-i18n="nav_about">About</a>
+                <a href="#services" class="nav-link text-sm font-semibold text-gray-600 hover:text-teal-700 uppercase tracking-wider transition-colors magnetic-target" data-i18n="nav_services">Services</a>
+                
+                <!-- Lang Switcher -->
+                <div class="flex items-center bg-gray-100 rounded-full px-1 py-1 ml-4">
+                    <button onclick="setLanguage('hy')" class="lang-btn w-8 h-8 rounded-full text-xs font-bold text-gray-500 hover:bg-white hover:shadow-sm transition-all" id="btn-hy">HY</button>
+                    <button onclick="setLanguage('en')" class="lang-btn w-8 h-8 rounded-full text-xs font-bold bg-white text-teal-700 shadow-sm transition-all" id="btn-en">EN</button>
+                    <button onclick="setLanguage('ru')" class="lang-btn w-8 h-8 rounded-full text-xs font-bold text-gray-500 hover:bg-white hover:shadow-sm transition-all" id="btn-ru">RU</button>
+                </div>
+
+                <a href="#contact" class="magnetic-btn px-8 py-3 bg-teal-900 text-white text-sm font-bold uppercase tracking-widest rounded-full hover:bg-teal-800 transition-colors shadow-xl magnetic-target" data-i18n="nav_contact">
+                    Contact
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="lg:hidden text-teal-900 z-50" id="mobile-toggle">
+                <span class="material-icons-round text-3xl">menu</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-teal-900 z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center text-white">
+        <a href="#home" class="text-3xl font-light mb-6 hover:text-teal-300 transition" onclick="toggleMenu()" data-i18n="nav_home">Home</a>
+        <a href="#about" class="text-3xl font-light mb-6 hover:text-teal-300 transition" onclick="toggleMenu()" data-i18n="nav_about">About</a>
+        <a href="#services" class="text-3xl font-light mb-6 hover:text-teal-300 transition" onclick="toggleMenu()" data-i18n="nav_services">Services</a>
+        <a href="#contact" class="text-3xl font-light mb-6 hover:text-teal-300 transition" onclick="toggleMenu()" data-i18n="nav_contact">Contact</a>
+        <div class="flex gap-4 mt-8">
+            <button onclick="setLanguage('hy'); toggleMenu()" class="px-4 py-2 border border-white/30 rounded-full">HY</button>
+            <button onclick="setLanguage('en'); toggleMenu()" class="px-4 py-2 border border-white/30 rounded-full">EN</button>
+            <button onclick="setLanguage('ru'); toggleMenu()" class="px-4 py-2 border border-white/30 rounded-full">RU</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Abstract Background Shapes -->
+        <div class="absolute top-0 right-0 w-[60vw] h-[60vw] bg-teal-50 rounded-full blur-3xl opacity-60 -translate-y-1/4 translate-x-1/4 z-0"></div>
+        <div class="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-orange-50 rounded-full blur-3xl opacity-60 translate-y-1/4 -translate-x-1/4 z-0"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
+            
+            <!-- Text Content -->
+            <div class="order-2 lg:order-1 hero-content">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-teal-800 text-xs font-bold uppercase tracking-widest mb-6 reveal-text">
+                    <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                    <span data-i18n="hero_badge">Premium Healthcare</span>
+                </div>
+                
+                <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 leading-[1.1] mb-8">
+                    <span class="block overflow-hidden"><span class="reveal-text block" data-i18n="hero_title_1">Redefining</span></span>
+                    <span class="block overflow-hidden"><span class="reveal-text block text-gradient" data-i18n="hero_title_2">Medical Excellence</span></span>
+                </h1>
+                
+                <p class="text-lg text-gray-600 mb-10 max-w-lg leading-relaxed reveal-text" data-i18n="hero_desc">
+                    Experience the future of healthcare. State-of-the-art technology meets compassionate care at Kamar Medical Center.
+                </p>
+                
+                <div class="flex flex-wrap gap-4 reveal-text">
+                    <a href="#contact" class="magnetic-btn group relative px-8 py-4 bg-teal-900 text-white rounded-full overflow-hidden shadow-2xl magnetic-target">
+                        <span class="relative z-10 font-bold uppercase tracking-wider text-sm group-hover:text-teal-900 transition-colors duration-300" data-i18n="btn_appointment">Book Appointment</span>
+                        <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
+                    </a>
+                    <a href="#services" class="magnetic-btn px-8 py-4 border border-gray-300 text-gray-900 rounded-full hover:border-teal-900 hover:text-teal-900 transition-all font-bold uppercase tracking-wider text-sm magnetic-target" data-i18n="btn_services">
+                        Explore Services
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Image Composition -->
+            <div class="order-1 lg:order-2 relative h-[500px] lg:h-[700px] w-full hero-image-container">
+                <div class="absolute inset-0 bg-gray-200 rounded-[2rem] overflow-hidden shadow-2xl reveal-img-container">
+                    <img src="" id="hero-img" alt="Doctor" class="w-full h-full object-cover scale-110 hero-img-inner">
+                </div>
+                <!-- Floating Card -->
+                <div class="absolute -bottom-10 -left-10 bg-white p-6 rounded-2xl shadow-2xl max-w-xs floating-card opacity-0">
+                    <div class="flex items-center gap-4 mb-3">
+                        <div class="bg-green-100 p-3 rounded-full text-green-600">
+                            <span class="material-icons-round">check_circle</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900 text-lg">100%</p>
+                            <p class="text-xs text-gray-500 uppercase tracking-wide" data-i18n="stat_satisfaction">Patient Satisfaction</p>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-green-500 h-full w-[98%]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Section -->
+    <div class="py-10 bg-teal-900 overflow-hidden whitespace-nowrap relative z-20 -rotate-1 scale-105 shadow-xl">
+        <div class="inline-block animate-marquee">
+            <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_1">Cardiology</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+            <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_2">Neurology</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+            <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_3">Pediatrics</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+            <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_4">Diagnostics</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+             <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_1">Cardiology</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+            <span class="text-4xl font-bold text-white/20 mx-8 uppercase tracking-widest" data-i18n="marquee_2">Neurology</span>
+            <span class="text-4xl font-bold text-white mx-8 uppercase tracking-widest">•</span>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                <!-- Left: Sticky Title -->
+                <div class="lg:col-span-5 relative">
+                    <div class="sticky top-32">
+                        <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-8 h-[1px] bg-teal-600"></span>
+                            <span data-i18n="about_subtitle">Who We Are</span>
+                        </h4>
+                        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-8 leading-tight" data-i18n="about_title">
+                            A Legacy of <br><span class="text-gradient">Healing & Trust</span>
+                        </h2>
+                        <p class="text-gray-600 mb-8 leading-relaxed" data-i18n="about_text_1">
+                            Founded on the principles of integrity and innovation, Kamar Medical Center has evolved into a beacon of hope and health in Armenia. We combine human touch with technological precision.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-8 mt-12">
+                            <div class="border-l-2 border-teal-100 pl-6">
+                                <span class="block text-4xl font-bold text-teal-900 mb-1 counter" data-target="15">0</span>
+                                <span class="text-sm text-gray-500 uppercase tracking-wide" data-i18n="stat_years">Years Experience</span>
+                            </div>
+                            <div class="border-l-2 border-teal-100 pl-6">
+                                <span class="block text-4xl font-bold text-teal-900 mb-1 counter" data-target="50">0</span>
+                                <span class="text-sm text-gray-500 uppercase tracking-wide" data-i18n="stat_doctors">Specialists</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Scrolling Images -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-6">
+                    <div class="space-y-6 mt-24">
+                        <div class="reveal-img-container rounded-2xl overflow-hidden h-64 shadow-lg gs-reveal">
+                            <img src="" class="about-img-1 w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="reveal-img-container rounded-2xl overflow-hidden h-96 shadow-lg gs-reveal">
+                            <img src="" class="about-img-2 w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="reveal-img-container rounded-2xl overflow-hidden h-96 shadow-lg gs-reveal">
+                            <img src="" class="about-img-3 w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="reveal-img-container rounded-2xl overflow-hidden h-64 shadow-lg gs-reveal">
+                            <img src="" class="about-img-4 w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Horizontal Scroll Feel) -->
+    <section id="services" class="py-32 bg-gray-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 mb-16 flex justify-between items-end">
+            <div>
+                <h4 class="text-teal-600 font-bold uppercase tracking-widest mb-2" data-i18n="services_subtitle">Our Expertise</h4>
+                <h2 class="text-4xl font-bold text-gray-900" data-i18n="services_title">Comprehensive Care</h2>
+            </div>
+            <div class="hidden md:flex gap-2">
+                <button class="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-teal-900 hover:text-white transition-colors" id="scroll-left">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <button class="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-teal-900 hover:text-white transition-colors" id="scroll-right">
+                    <span class="material-icons-round">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Horizontal Scroll Container -->
+        <div class="flex overflow-x-auto pb-12 px-6 gap-8 hide-scrollbar snap-x snap-mandatory" id="services-container" style="scrollbar-width: none;">
+            
+            <!-- Service Card 1 -->
+            <div class="min-w-[350px] md:min-w-[400px] bg-white p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group snap-center service-card border border-gray-100">
+                <div class="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-700 mb-8 group-hover:bg-teal-700 group-hover:text-white transition-colors duration-300">
+                    <span class="material-icons-round text-3xl">favorite</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="serv_1_title">Cardiology</h3>
+                <p class="text-gray-500 mb-8 leading-relaxed" data-i18n="serv_1_desc">Advanced cardiac care utilizing non-invasive diagnostics and interventional procedures.</p>
+                <a href="#" class="inline-flex items-center text-teal-700 font-bold uppercase text-sm tracking-wider group-hover:gap-4 transition-all gap-2">
+                    <span data-i18n="serv_link">Details</span> <span class="material-icons-round text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div class="min-w-[350px] md:min-w-[400px] bg-white p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group snap-center service-card border border-gray-100">
+                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-700 mb-8 group-hover:bg-blue-700 group-hover:text-white transition-colors duration-300">
+                    <span class="material-icons-round text-3xl">psychology</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="serv_2_title">Neurology</h3>
+                <p class="text-gray-500 mb-8 leading-relaxed" data-i18n="serv_2_desc">Expert treatment for complex neurological conditions affecting the brain and spine.</p>
+                <a href="#" class="inline-flex items-center text-blue-700 font-bold uppercase text-sm tracking-wider group-hover:gap-4 transition-all gap-2">
+                    <span data-i18n="serv_link">Details</span> <span class="material-icons-round text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div class="min-w-[350px] md:min-w-[400px] bg-white p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group snap-center service-card border border-gray-100">
+                <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-700 mb-8 group-hover:bg-purple-700 group-hover:text-white transition-colors duration-300">
+                    <span class="material-icons-round text-3xl">child_care</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="serv_6_title">Pediatrics</h3>
+                <p class="text-gray-500 mb-8 leading-relaxed" data-i18n="serv_6_desc">Compassionate care for your little ones, from newborns to adolescents.</p>
+                <a href="#" class="inline-flex items-center text-purple-700 font-bold uppercase text-sm tracking-wider group-hover:gap-4 transition-all gap-2">
+                    <span data-i18n="serv_link">Details</span> <span class="material-icons-round text-sm">arrow_forward</span>
+                </a>
+            </div>
+
+             <!-- Service Card 4 -->
+             <div class="min-w-[350px] md:min-w-[400px] bg-white p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group snap-center service-card border border-gray-100">
+                <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-700 mb-8 group-hover:bg-orange-700 group-hover:text-white transition-colors duration-300">
+                    <span class="material-icons-round text-3xl">accessibility_new</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4" data-i18n="serv_4_title">Orthopedics</h3>
+                <p class="text-gray-500 mb-8 leading-relaxed" data-i18n="serv_4_desc">Restoring mobility and quality of life through advanced surgical and non-surgical treatments.</p>
+                <a href="#" class="inline-flex items-center text-orange-700 font-bold uppercase text-sm tracking-wider group-hover:gap-4 transition-all gap-2">
+                    <span data-i18n="serv_link">Details</span> <span class="material-icons-round text-sm">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Appointment -->
+    <section id="contact" class="py-32 relative bg-teal-900 text-white overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="max-w-5xl mx-auto px-6 relative z-10">
+            <div class="glass-panel bg-white/10 border-white/20 p-8 md:p-16 rounded-[3rem] text-center backdrop-blur-xl">
+                <h2 class="text-3xl md:text-5xl font-bold mb-6" data-i18n="cta_title">Your Health is Our Priority</h2>
+                <p class="text-teal-100 text-lg mb-10 max-w-2xl mx-auto" data-i18n="cta_desc">Don't wait for symptoms to worsen. Schedule a comprehensive check-up with our world-class specialists today.</p>
+                
+                <form class="max-w-md mx-auto space-y-4 text-left">
+                    <div class="relative group">
+                        <input type="text" class="w-full bg-white/10 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-white/50 focus:outline-none focus:bg-white/20 transition-all" placeholder=" " required>
+                        <label class="absolute left-6 top-4 text-white/50 text-sm transition-all group-focus-within:-top-3 group-focus-within:text-xs group-focus-within:bg-teal-900 group-focus-within:px-2 pointer-events-none" data-i18n="form_name">Full Name</label>
+                    </div>
+                    <div class="relative group">
+                        <input type="tel" class="w-full bg-white/10 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-white/50 focus:outline-none focus:bg-white/20 transition-all" placeholder=" " required>
+                        <label class="absolute left-6 top-4 text-white/50 text-sm transition-all group-focus-within:-top-3 group-focus-within:text-xs group-focus-within:bg-teal-900 group-focus-within:px-2 pointer-events-none" data-i18n="form_phone">Phone Number</label>
+                    </div>
+                    <button type="button" class="w-full bg-white text-teal-900 font-bold py-4 rounded-xl hover:bg-teal-50 transition-colors shadow-lg mt-4 magnetic-target" data-i18n="form_submit">
+                        Request Appointment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-20 pb-10 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <span class="material-icons-round text-3xl text-teal-500">local_hospital</span>
+                        <span class="font-bold text-xl tracking-widest uppercase">Kamar</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-i18n="footer_desc">
+                        Elevating healthcare standards in Armenia with passion and precision.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6 text-white" data-i18n="footer_links">Navigation</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="#home" class="hover:text-teal-400 transition" data-i18n="nav_home">Home</a></li>
+                        <li><a href="#about" class="hover:text-teal-400 transition" data-i18n="nav_about">About Us</a></li>
+                        <li><a href="#services" class="hover:text-teal-400 transition" data-i18n="nav_services">Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-6 text-white" data-i18n="footer_contact">Contact</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-start gap-3">
+                            <span class="material-icons-round text-teal-500 text-lg">location_on</span>
+                            <span data-i18n="footer_address">Yerevan, Armenia</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-icons-round text-teal-500 text-lg">phone</span>
+                            <span>+374 10 123456</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-6 text-white" data-i18n="footer_hours">Hours</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex justify-between"><span data-i18n="day_mon_fri">Mon-Fri</span> <span>09:00 - 20:00</span></li>
+                        <li class="flex justify-between"><span data-i18n="day_sat">Sat</span> <span>10:00 - 18:00</span></li>
+                        <li class="flex justify-between"><span data-i18n="day_sun">Sun</span> <span class="text-red-400" data-i18n="status_closed">Closed</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs">
+                <p>&copy; 2026 Kamar Medical Center.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Translations ---
+        const translations = {
+            en: {
+                brand_sub: "Medical Center",
+                nav_home: "Home", nav_about: "About", nav_services: "Services", nav_contact: "Contact",
+                hero_badge: "Premium Healthcare", hero_title_1: "Redefining", hero_title_2: "Medical Excellence",
+                hero_desc: "Experience the future of healthcare. State-of-the-art technology meets compassionate care at Kamar Medical Center.",
+                btn_appointment: "Book Appointment", btn_services: "Explore Services",
+                stat_satisfaction: "Patient Satisfaction", stat_years: "Years Experience", stat_doctors: "Specialists",
+                about_subtitle: "Who We Are", about_title: "A Legacy of <br><span class='text-gradient'>Healing & Trust</span>",
+                about_text_1: "Founded on the principles of integrity and innovation, Kamar Medical Center has evolved into a beacon of hope and health in Armenia. We combine human touch with technological precision.",
+                marquee_1: "Cardiology", marquee_2: "Neurology", marquee_3: "Pediatrics", marquee_4: "Diagnostics",
+                services_subtitle: "Our Expertise", services_title: "Comprehensive Care",
+                serv_1_title: "Cardiology", serv_1_desc: "Advanced cardiac care utilizing non-invasive diagnostics and interventional procedures.",
+                serv_2_title: "Neurology", serv_2_desc: "Expert treatment for complex neurological conditions affecting the brain and spine.",
+                serv_6_title: "Pediatrics", serv_6_desc: "Compassionate care for your little ones, from newborns to adolescents.",
+                serv_4_title: "Orthopedics", serv_4_desc: "Restoring mobility and quality of life through advanced surgical and non-surgical treatments.",
+                serv_link: "Details",
+                cta_title: "Your Health is Our Priority", cta_desc: "Don't wait for symptoms to worsen. Schedule a comprehensive check-up with our world-class specialists today.",
+                form_name: "Full Name", form_phone: "Phone Number", form_submit: "Request Appointment",
+                footer_desc: "Elevating healthcare standards in Armenia with passion and precision.",
+                footer_links: "Navigation", footer_contact: "Contact", footer_address: "Yerevan, Armenia",
+                footer_hours: "Hours", day_mon_fri: "Mon-Fri", day_sat: "Sat", day_sun: "Sun", status_closed: "Closed"
+            },
+            hy: {
+                brand_sub: "Բժշկական Կենտրոն",
+                nav_home: "Գլխավոր", nav_about: "Մեր Մասին", nav_services: "Ծառայություններ", nav_contact: "Կապ",
+                hero_badge: "Պրեմիում Առողջապահություն", hero_title_1: "Վերասահմանելով", hero_title_2: "Բժշկական Գերազանցությունը",
+                hero_desc: "Փորձեք առողջապահության ապագան: Ժամանակակից տեխնոլոգիաներ և հոգատար վերաբերմունք Կամար Բժշկական Կենտրոնում:",
+                btn_appointment: "Գրանցվել", btn_services: "Ծառայություններ",
+                stat_satisfaction: "Հիվանդների Բավարարվածություն", stat_years: "Տարվա Փորձ", stat_doctors: "Բժիշկ",
+                about_subtitle: "Ով ենք Մենք", about_title: "Բուժման և Վստահության <br><span class='text-gradient'>Ժառանգություն</span>",
+                about_text_1: "Հիմնված լինելով ազնվության և նորարարության սկզբունքների վրա՝ Կամար Բժշկական Կենտրոնը դարձել է հույսի և առողջության կենտրոն Հայաստանում:",
+                marquee_1: "Սրտաբանություն", marquee_2: "Նյարդաբանություն", marquee_3: "Մանկաբուժություն", marquee_4: "Ախտորոշում",
+                services_subtitle: "Մեր Փորձառությունը", services_title: "Համապարփակ Խնամք",
+                serv_1_title: "Սրտաբանություն", serv_1_desc: "Առաջադեմ սրտային խնամք՝ օգտագործելով ոչ ինվազիվ ախտորոշում:",
+                serv_2_title: "Նյարդաբանություն", serv_2_desc: "Նյարդային համակարգի բարդ հիվանդությունների մասնագիտացված բուժում:",
+                serv_6_title: "Մանկաբուժություն", serv_6_desc: "Հոգատար վերաբերմունք ձեր փոքրիկների նկատմամբ:",
+                serv_4_title: "Օրթոպեդիա", serv_4_desc: "Շարժունակության վերականգնում առաջադեմ բուժման միջոցով:",
+                serv_link: "Մանրամասն",
+                cta_title: "Ձեր Առողջությունը Մեր Առաջնահերթությունն է", cta_desc: "Մի սպասեք ախտանիշների վատթարացմանը: Գրանցվեք այսօր:",
+                form_name: "Անուն Ազգանուն", form_phone: "Հեռախոս", form_submit: "Գրանցվել",
+                footer_desc: "Բարձրացնելով առողջապահության չափանիշները Հայաստանում:",
+                footer_links: "Նավիգացիա", footer_contact: "Կապ", footer_address: "Երևան, Հայաստան",
+                footer_hours: "Ժամեր", day_mon_fri: "Երկ-Ուրբ", day_sat: "Շաբ", day_sun: "Կիր", status_closed: "Փակ"
+            },
+            ru: {
+                brand_sub: "Медицинский Центр",
+                nav_home: "Главная", nav_about: "О Нас", nav_services: "Услуги", nav_contact: "Контакты",
+                hero_badge: "Премиум Здравоохранение", hero_title_1: "Переосмысляя", hero_title_2: "Медицинское Совершенство",
+                hero_desc: "Испытайте будущее здравоохранения. Передовые технологии и заботливое отношение в Медицинском Центре Камар.",
+                btn_appointment: "Записаться", btn_services: "Услуги",
+                stat_satisfaction: "Удовлетворенность", stat_years: "Лет Опыта", stat_doctors: "Врачей",
+                about_subtitle: "Кто Мы", about_title: "Наследие <br><span class='text-gradient'>Лечения и Доверия</span>",
+                about_text_1: "Основанный на принципах честности и инноваций, Медицинский Центр Камар стал маяком надежды и здоровья в Армении.",
+                marquee_1: "Кардиология", marquee_2: "Неврология", marquee_3: "Педиатрия", marquee_4: "Диагностика",
+                services_subtitle: "Наш Опыт", services_title: "Комплексный Уход",
+                serv_1_title: "Кардиология", serv_1_desc: "Передовая кардиологическая помощь с использованием неинвазивной диагностики.",
+                serv_2_title: "Неврология", serv_2_desc: "Экспертное лечение сложных неврологических состояний.",
+                serv_6_title: "Педиатрия", serv_6_desc: "Заботливый уход за вашими детьми, от новорожденных до подростков.",
+                serv_4_title: "Ортопедия", serv_4_desc: "Восстановление подвижности с помощью передовых методов лечения.",
+                serv_link: "Подробнее",
+                cta_title: "Ваше Здоровье - Наш Приоритет", cta_desc: "Не ждите ухудшения симптомов. Запишитесь на прием сегодня.",
+                form_name: "ФИО", form_phone: "Телефон", form_submit: "Записаться",
+                footer_desc: "Повышая стандарты здравоохранения в Армении с страстью и точностью.",
+                footer_links: "Навигация", footer_contact: "Контакты", footer_address: "Ереван, Армения",
+                footer_hours: "Часы", day_mon_fri: "Пн-Пт", day_sat: "Сб", day_sun: "Вс", status_closed: "Закрыто"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if(key.includes('title') || key === 'about_title') {
+                         el.innerHTML = translations[lang][key]; // Allow HTML for spans
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update active button state
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
+                btn.classList.add('text-gray-500');
+            });
+            const activeBtn = document.getElementById(`btn-${lang}`);
+            activeBtn.classList.remove('text-gray-500');
+            activeBtn.classList.add('bg-white', 'text-teal-700', 'shadow-sm');
+        }
+
+        // --- Mobile Menu ---
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = !menu.classList.contains('translate-x-full');
+            if (isOpen) {
+                menu.classList.add('translate-x-full');
+            } else {
+                menu.classList.remove('translate-x-full');
+            }
+        }
+        document.getElementById('mobile-toggle').addEventListener('click', toggleMenu);
+
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Add slight delay for outline
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover effects for cursor
+        document.querySelectorAll('a, button, .magnetic-target').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
+        });
+
+        // --- Magnetic Button Effect ---
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // --- Horizontal Scroll Buttons ---
+        const scrollContainer = document.getElementById('services-container');
+        document.getElementById('scroll-left').addEventListener('click', () => {
+            scrollContainer.scrollBy({ left: -400, behavior: 'smooth' });
+        });
+        document.getElementById('scroll-right').addEventListener('click', () => {
+            scrollContainer.scrollBy({ left: 400, behavior: 'smooth' });
+        });
+
+        // --- GSAP Animations ---
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Loader Animation
+            const tl = gsap.timeline();
+            tl.to(".loader-line", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+              .to("#loader", { y: "-100%", duration: 0.8, ease: "power4.inOut" })
+              .from(".reveal-text", { 
+                  y: 100, 
+                  opacity: 0, 
+                  duration: 1, 
+                  stagger: 0.2, 
+                  ease: "power3.out" 
+              }, "-=0.4")
+              .from(".hero-image-container", {
+                  scale: 0.9,
+                  opacity: 0,
+                  duration: 1.2,
+                  ease: "power2.out"
+              }, "-=1")
+              .to(".floating-card", {
+                  opacity: 1,
+                  y: -20,
+                  duration: 1,
+                  ease: "back.out(1.7)"
+              }, "-=0.5");
+
+            // Navbar Scroll Effect
+            ScrollTrigger.create({
+                start: "top -80",
+                end: 99999,
+                toggleClass: { className: "glass-panel shadow-lg py-4", targets: "#navbar" }
+            });
+
+            // Image Reveal Animation
+            gsap.utils.toArray('.reveal-img-container').forEach(container => {
+                gsap.to(container, {
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top 80%",
+                    },
+                    "--dummy": 0, // dummy property to trigger onUpdate if needed, but we use direct animation
+                    onComplete: () => {
+                        // Animate the pseudo-element via class or direct style manipulation is hard, 
+                        // so we use a child div for the mask usually. 
+                        // Here we simulate by scaling image inside
+                    }
+                });
+                // Simple scale effect for images on scroll
+                gsap.from(container.querySelector('img'), {
+                    scale: 1.3,
+                    duration: 1.5,
+                    scrollTrigger: {
+                        trigger: container,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: true
+                    }
+                });
+            });
+
+            // Counter Animation
+            gsap.utils.toArray('.counter').forEach(counter => {
+                const target = counter.getAttribute('data-target');
+                gsap.to(counter, {
+                    innerText: target,
+                    duration: 2,
+                    snap: { innerText: 1 },
+                    scrollTrigger: {
+                        trigger: counter,
+                        start: "top 85%"
+                    }
+                });
+            });
+        });
+
+        // --- Image Generation Calls ---
+        // Using the tool to generate specific premium medical images
+        async function initImages() {
+            try {
+                // 1. Hero Image: Professional doctor, modern, teal tones
+                const heroRes = await image_gen({ prompt: "professional male doctor in modern hospital lobby, wearing white coat with teal stethoscope, smiling confidently, bright natural lighting, depth of field, high resolution, photorealistic, cinematic composition" });
+                document.getElementById('hero-img').src = heroRes;
+
+                // 2. About Images: Grid layout
+                const about1 = await image_gen({ prompt: "close up of modern medical equipment in clean hospital room, teal accents, minimalist, 8k" });
+                document.querySelector('.about-img-1').src = about1;
+
+                const about2 = await image_gen({ prompt: "team of diverse doctors discussing patient file in modern glass meeting room, professional, serious but friendly, bright lighting" });
+                document.querySelector('.about-img-2').src = about2;
+
+                const about3 = await image_gen({ prompt: "happy elderly patient holding hands with nurse, warm lighting, emotional connection, high quality photography" });
+                document.querySelector('.about-img-3').src = about3;
+
+                const about4 = await image_gen({ prompt: "modern hospital building exterior architecture, glass facade, blue sky, low angle shot, impressive" });
+                document.querySelector('.about-img-4').src = about4;
+
+            } catch (e) {
+                console.error("Image gen error", e);
+            }
+        }
+        
+        // Start image generation
+        initImages();
+
+    </script>
+</body>
+</html>
 
